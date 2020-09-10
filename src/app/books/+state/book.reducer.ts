@@ -9,7 +9,7 @@ export interface State extends EntityState<Book> {
   loading: boolean;
 }
 
-const bookAdapter = createEntityAdapter<Book>({
+export const bookAdapter = createEntityAdapter<Book>({
   selectId: book => book.isbn
 });
 
