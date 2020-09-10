@@ -1,18 +1,21 @@
 import { Action, createReducer, on } from '@ngrx/store';
+import { EntityState, createEntityAdapter } from '@ngrx/entity';
 import * as BookActions from './book.actions';
 import { Book } from '../shared/book';
 
 export const bookFeatureKey = 'book';
 
-export interface State {
-  books: Book[];
+export interface State extends EntityState<Book> {
   loading: boolean;
 }
 
-export const initialState: State = {
-  books: [],
+const bookAdapter = createEntityAdapter<Book>({
+  selectId: book => book.isbn
+});
+
+export const initialState: State = bookAdapter.getInitialState({
   loading: false
-};
+});
 
 
 export const reducer = createReducer(
@@ -23,11 +26,7 @@ export const reducer = createReducer(
   }),
 
   on(BookActions.loadBooksSuccess, (state, action) => {
-    return {
-      ...state,
-      loading: false,
-      books: action.books
-    };
+    return bookAdapter.setAll(action.books, { ...state, loading: false })
   }),
 
   on(BookActions.loadBooksFailure, state => {
