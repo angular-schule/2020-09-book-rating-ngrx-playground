@@ -3,6 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { Book } from '../shared/book';
 import { BookStoreService } from '../shared/book-store.service';
 import { of } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+import { loadBooks } from '../+state/book.actions';
+import { selectAllBooks, selectBooksLoading } from '../+state/book.selectors';
 
 @Component({
   selector: 'br-dashboard',
@@ -11,14 +14,13 @@ import { of } from 'rxjs';
 })
 export class DashboardComponent implements OnInit {
 
-  books: Book[];
+  books$ = this.store.pipe(select(selectAllBooks));
+  loading$ = this.store.pipe(select(selectBooksLoading));
 
-  constructor(private bs: BookStoreService) { }
+  constructor(private bs: BookStoreService, private store: Store) { }
 
   ngOnInit() {
-    this.bs.getAll().subscribe(books => {
-      this.books = books;
-    });
+    this.store.dispatch(loadBooks());
   }
 
   rateUp(book: Book) {
