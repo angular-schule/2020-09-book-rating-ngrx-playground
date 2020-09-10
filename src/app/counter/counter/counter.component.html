@@ -2,9 +2,10 @@
 
   <button class="btn btn-primary mr-2" (click)="increment()">Increment</button>
   <button class="btn btn-primary mr-2" (click)="decrement()">Decrement</button>
+  <button class="btn btn-primary mr-2" (click)="plus30()">Plus 30</button>
   <button class="btn btn-primary mr-2" (click)="reset()">Reset</button>
 
   <div class="counter">
-    <!-- TODO: Show counter here -->
+    {{ counter$ | async }}
   </div>
 </div>
